@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ohio Chess Post</title>
+        <link href="../home.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <nav>
+        <div class="topnav" id="myTopnav">
+            <a href="" class="logo">Ohio Chess Club</a>
+            <a href="#home" class="active">Home</a>
+            <a href="#news">News</a>
+            <a href="#contact">Contact</a>
+            <a href="#about">About</a>
+            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+              <i class="fa fa-bars"></i>
+            </a>
+          </div>
+    </nav>
+    <body>
+        <div style="padding-left:16px" class="container">
+            <h2 class="welcome-message blog-name" id="post-title">Loading your post.</h2>
+            <h3 class="welcome-message blog-description" id="post-description">Please be patient.</h3>
+            <br>
+            <p class="blog-description" id="post-content">If you have seen this message for over 10 seconds. Please refresh.</p>
+        </div>
+    </body>
+    <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css" />
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+import { getDatabase, ref, onValue} from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
+
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBCIg7D0HRBQtPNmvoeC8TNqZn5gQDtvww",
+  authDomain: "ohiochessclub-7a77c.firebaseapp.com",
+  databaseURL: "https://ohiochessclub-7a77c-default-rtdb.firebaseio.com",
+  projectId: "ohiochessclub-7a77c",
+  storageBucket: "ohiochessclub-7a77c.appspot.com",
+  messagingSenderId: "1078907166132",
+  appId: "1:1078907166132:web:15c235b401bdf4eb2b26e1"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+const postIdRegex = /index.html\?(.+)/;
+const url = window.location.href;
+const match = url.match(postIdRegex);
+if (match) {
+  const postId = match[1];
+  fetchPost(postId);
+  console.log(postId); // prints the matched string
+} else {
+  console.log('No query parameter found in URL');
+}
+
+function fetchPost(postId){
+    const db = getDatabase();
+    const postTitleRef = ref(db, 'posts/' + postId + '/name');
+    onValue(postTitleRef, (snapshot) => {
+    const data = snapshot.val();
+    document.getElementById('post-title').textContent=data;
+    });
+    const postDescriptionRef = ref(db, 'posts/' + postId + '/description');
+    onValue(postDescriptionRef, (snapshot) => {
+    const data = snapshot.val();
+    document.getElementById('post-description').textContent=data;
+    });
+    const postContentRef = ref(db, 'posts/' + postId + '/content');
+    onValue(postContentRef, (snapshot) => {
+    const text = snapshot.val();
+    if(snapshot.val() === null){
+        console.log('No text error.')
+    }
+    let replacedText;
+    if (text.includes('*')) {
+    replacedText = text.replace(/\*/g, "</p><p>");
+    } else {
+    replacedText = text;
+    }
+
+    console.log(replacedText);
+    document.getElementById('post-content').innerHTML = replacedText;
+    });
+
+    // Display all Boards:
+    const BoardsRef = ref(db, 'posts/' + postId + '/boards');
+
+    onValue(BoardsRef, (snapshot) => {
+  // Sort childKeys in descending order
+  snapshot.forEach((childSnapshot) => {
+  const childKey = childSnapshot.key;
+  const boardContainer = document.getElementById(`${childKey}`);
+  const fen = childSnapshot.val();
+  const encodedFenString = encodeURIComponent(fen);
+  const imgUrl = `https://fen2png.com/api/?fen=${encodedFenString}&raw=true`;
+  console.log(fen); // log the value to verify it is being retrieved correctly
+  boardContainer.innerHTML = `<img src="${imgUrl}">`;
+  var boardsize = document.createElement('style');
+  boardsize.innerHTML = `
+  img {
+    max-width: 300px;
+  }
+  `;
+  document.body.appendChild(boardsize)
+
+});
+
+
+  }, {
+    onlyOnce: true
+  });
+
+    }
+</script>
+<style>
+  p {
+    text-indent: 50px;
+  }
+</style>
+</html>
