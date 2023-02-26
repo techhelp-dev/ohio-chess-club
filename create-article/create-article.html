@@ -9,30 +9,75 @@
 </head>
 <body>
 <div class="container">
-    <input id="name-field" placeholder="Name your post"><br><br>
-    <input id="description-field" placeholder="Enter your post description"><br><br><p>Indents will be done for you! DO NOT INDENT!</p><br>
-    <textarea id="post-content-enter1">Paragraph 1</textarea><br><br><textarea id="post-content-enter2">Paragraph 2</textarea><br><br><textarea id="post-content-enter3">Paragraph 3 --- Out of paragraphs? Just put a * and move on to the next line</textarea><br>
+    <input id="name-field" placeholder="Name your post" class="name"><br><br>
+    <input id="description-field" placeholder="Enter your post description" class="description"><br><br><p>Indents will be done for you! DO NOT INDENT!</p><br>
+    <textarea id="post-content-enter1" placeholder="Paragraph 1"></textarea><br><br><textarea id="post-content-enter2" placeholder="Paragraph 2"></textarea><br><br><textarea id="post-content-enter3" placeholder="Paragraph 3 --- Out of paragraphs? Just put a * and move on to the next line"></textarea><br>
     <button id="post-post">Post</button><br>
     <button id="createboard-trigger">Create A Chess Board</button>
 </div>
 </body>
 <style>
     * {
-        text-align: center;
-        border-color: black;
-    }
-    .container{
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-    textarea {
-        width: 400px; /* set the width to 400 pixels */
-        height: 200px; /* set the height to 200 pixels */
-    }
-    textarea {
-        text-align: left;
-    }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.name, .description {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+textarea {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  resize: vertical;
+}
+
+button {
+  display: block;
+  padding: 10px;
+  margin: 0 auto;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0062cc;
+}
+
+p {
+  margin-bottom: 20px;
+}
+
 </style>
 </html>

@@ -51,7 +51,7 @@
       postNumber = postsMade + 1;
     });
     document.getElementById('post-post').addEventListener('click', function(){
-      finish(postNumber);
+      check(postNumber);
       console.log('Connected')
     })
   });
@@ -84,3 +84,20 @@
     console.log('Post successful.');
     document.body.innerHTML = "Posted Successfully. Please reload to make another post.";
   }
+
+  function check(postNumber) {
+    if (document.getElementById("name-field").value === "") {
+      alert("Please include a title to your post.");
+    }
+    if (document.getElementById("description-field").value === "") {
+      alert("Please include a description to your post.");
+    }
+    if (document.getElementById('post-content-enter1').value === "" && document.getElementById('post-content-enter2').value === "" && document.getElementById('post-content-enter3').value === "") {
+      alert("Please have at least some post text.")
+    }
+    else {
+      console.log('This post meets all requirments.')
+      finish(postNumber);
+    }
+  }
+  

@@ -7,34 +7,41 @@
   <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
   <meta name="viewport" content="width=device-width, minimum-scale=0.1">
 </head>
-
-<body style="margin: 0px; background: #0e0e0e; height: 100%">
-  <div id="chessboard-container" style="width: 400px"></div>
-  
+<body>
+  <div id="chessboard-container"></div>
+  <canvas id="canvas" style="display:none;"></canvas>
   <script>
 const urlParams = new URLSearchParams(window.location.search);
 const fen = urlParams.get('fen');
 if (fen) {
   // Create Chessboard with Chessboard.js
   var board = Chessboard('chessboard-container', {
-    draggable: true,
-    position: fen
+    draggable: false,
+    position: fen,
+    showNotation: false,
+    resize: true,
   });
+  $(window).resize(board.resize);
   console.log(board);
 
-  // Use html2canvas to create an image of the chessboard container and display it on the page
-  const chessboardContainer = document.getElementById('chessboard-container');
-  html2canvas(chessboardContainer).then(canvas => {
-    const image = new Image();
-    image.src = canvas.toDataURL();
-    image.style = "display: block;-webkit-user-select: none;margin: auto;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;"
-    document.body.innerHTML = '';
-    document.body.appendChild(image);
-  });
+  // const chessboardContainer = document.getElementById('chessboard-container');
+  // const canvas = document.getElementById('canvas');
+  // const ctx = canvas.getContext('2d');
+  
+  // html2canvas(chessboardContainer).then(canvas => {
+  //   ctx.drawImage(canvas, 0, 0);
+  //   const image = new Image();
+  //   image.src = canvas.toDataURL();
+  //   // image.style = "display: block;-webkit-user-select: none;margin: auto;background-color: hsl(0, 0%, 90%);transition: background-color 300ms;"
+  //   document.body.innerHTML = '';
+  //   document.body.appendChild(image);
+  // });
 }
 else {
   alert('No FEN found! Sorry for this bug. Please come back in a minute.')
 }
-
   </script>
+  <style>
+
+  </style>
 </body>

@@ -51,6 +51,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+var error = `<h2 class="welcome-message blog-name" id="post-title">There seems to be an error with this URL.</h1><h3 id="post-description" class="welcome-message blog-description"><a href="/home.html">Go Home</a>`
 
 const postIdRegex = /\?(.+)/;
 const url = window.location.href;
@@ -63,8 +64,6 @@ if (match) {
   console.log('No query parameter found in URL');
   document.getElementById('containerd').innerHTML = error;
 }
-
-var error = `<h2 class="welcome-message blog-name" id="post-title">There seems to be an error with this URL.</h1><h3 id="post-description" class="welcome-message blog-description"><a href="/home.html">Go Home</a>`
 
 function fetchPost(postId){
     const db = getDatabase();
@@ -105,13 +104,13 @@ function fetchPost(postId){
   const boardContainer = document.getElementById(`${childKey}`);
   const fen = childSnapshot.val();
   const encodedFenString = encodeURIComponent(fen);
-  const imgUrl = `https://fen2png.com/api/?fen=${encodedFenString}&raw=true`;
+  const imgUrl = `board.html?fen=${encodedFenString}`;
   console.log(fen); // log the value to verify it is being retrieved correctly
-  boardContainer.innerHTML = `<img src="${imgUrl}">`;
+  boardContainer.innerHTML = `<iframe src="${imgUrl}" width="400px" height:"400px">`;
   var boardsize = document.createElement('style');
   boardsize.innerHTML = `
-  img {
-    max-width: 300px;
+  iframe {
+    border: none;
   }
   `;
   document.body.appendChild(boardsize)
@@ -134,6 +133,16 @@ const postRef = ref(db, 'posts/' + postId);
 <style>
   p {
     text-indent: 50px;
+  }
+  iframe {
+    width: 350px;
+    height: 350px;
+  }
+  @media screen and (max-width: 600px) {
+    iframe {
+      width: 200px;
+      height: 200px;
+    }
   }
 </style>
 </html>
