@@ -16,7 +16,7 @@
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
 
-  import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
+  import { getDatabase, ref, onValue, set, remove } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
   import { onAuthStateChanged, getAuth } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-auth.js";
   const auth = getAuth();
   onAuthStateChanged(auth, (user) => {
@@ -45,16 +45,24 @@
   let postNumber = 0;
   
   onValue(dbRef, (snapshot) => {
+    let highestPostNumber = 0;
+  
     snapshot.forEach((childSnapshot) => {
-      postsMade = postsMade + 1;
-      console.log("Amount of posts: " + postsMade);
-      postNumber = postsMade + 1;
+      const postNumber = parseInt(childSnapshot.key);
+      if (postNumber > highestPostNumber) {
+        highestPostNumber = postNumber;
+      }
     });
+    
+    const newPostNumber = highestPostNumber + 1;
+    console.log("New post number: " + newPostNumber);
+  
     document.getElementById('post-post').addEventListener('click', function(){
       check(postNumber);
       console.log('Connected')
     })
   });
+  
   
   let boards = {}; // create an object to hold all the boards
   
@@ -101,3 +109,17 @@
     }
   }
   
+
+  document.getElementById('remove-post').addEventListener('click', function(){
+    postRemoveRun();
+  })
+
+  function postRemoveRun(){
+    var postId = prompt('Enter the id of the post you want to delete. This can be found in the url. EXAMPLE: ohiochessclub.com/post/?2  IN this example 2 is the post id.');
+    deletePost(postId);
+  }
+
+  function deletePost(postId){
+    remove(ref(db, 'posts/' + postId));
+    document.body.innerHTML = "Removed Successfully. Please reload to make another action.";
+  }

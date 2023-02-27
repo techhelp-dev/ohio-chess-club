@@ -26,9 +26,61 @@
     </div>
 </body>
 
+<div class="posts-grid">
 
+</div>
 
 <!-- NAV JAVASCRIPT -->
 <script src="nav.js"></script>
 <script src="display-articles.js" type="module"></script>
+<style>
+        /* Set font sizes and alignment for title and description */
+        .post-title {
+      font-size: 24px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+  
+    .post-description {
+      font-size: 18px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  
+    /* Style the button */
+    .read-more-button {
+      background-color: #00001D;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 20px;
+    }
+  
+    .read-more-button:hover {
+      background-color: #1A1A34;
+    }
+  
+    /* Set the grid display */
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      justify-items: center;
+    }
+  
+    /* Style the post container */
+    .post-container {
+      background-color: white;
+      border: 1px solid #E6E6E6;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0px 0px 10px #E6E6E6;
+      width: 290px;
+      max-width: 290px;
+    }
+</style>
 </html>

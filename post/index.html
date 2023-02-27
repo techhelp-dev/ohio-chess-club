@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css" />
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+        <script src="/nav.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
 import { getDatabase, ref, onValue} from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
@@ -135,13 +136,13 @@ const postRef = ref(db, 'posts/' + postId);
     text-indent: 50px;
   }
   iframe {
-    width: 350px;
-    height: 350px;
+    width: 300px;
+    height: 300px;
   }
   @media screen and (max-width: 600px) {
     iframe {
-      width: 200px;
-      height: 200px;
+      width: 250px;
+      height: 260px;
     }
   }
 </style>
