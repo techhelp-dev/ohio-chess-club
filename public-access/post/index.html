@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ohio Chess Post</title>
+        <link href="../home.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+    </head>
+    <nav>
+        <div class="topnav" id="myTopnav">
+            <a href="" class="logo">Ohio Chess Club</a>
+            <a href="#home" class="active">Home</a>
+            <a href="#news">News</a>
+            <a href="#contact">Contact</a>
+            <a href="#about">About</a>
+            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+              <i class="fa fa-bars"></i>
+            </a>
+          </div>
+    </nav>
+    <body>
+        <div style="padding-left:16px" class="container" id="containerd">
+            <h2 class="welcome-message blog-name" id="post-title">Loading your post.</h2>
+            <h3 class="welcome-message blog-description" id="post-description">Please be patient.</h3>
+            <br>
+            <p class="blog-description" id="post-content">If you have seen this message for over 10 seconds. Please refresh.</p>
+        </div>
+    </body>
+    <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css" />
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"></script>
+        <script src="/nav.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+import { getDatabase, ref, onValue} from "https://www.gstatic.com/firebasejs/9.17.1/firebase-database.js";
+
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyD3cEGXZUNTVF6UpI0aBnnS1ym56davbCI",
+    authDomain: "ohio-chess-club.firebaseapp.com",
+    projectId: "ohio-chess-club",
+    storageBucket: "ohio-chess-club.appspot.com",
+    messagingSenderId: "945081739735",
+    appId: "1:945081739735:web:2446200801ed390f814392"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+var error = `<h2 class="welcome-message blog-name" id="post-title">There seems to be an error with this URL.</h1><h3 id="post-description" class="welcome-message blog-description"><a href="/home.html">Go Home</a>`
+  const db = getDatabase();
+const postIdRegex = /\?(.+)/;
+const url = window.location.href;
+const match = url.match(postIdRegex);
+if (match) {
+  const postId = match[1];
+  fetchPost(postId);
+  console.log(postId); // prints the matched string
+} else {
+  console.log('No query parameter found in URL');
+  document.getElementById('containerd').innerHTML = error;
+}
+
+function fetchPost(postId){
+    const db = getDatabase();
+    const postTitleRef = ref(db, 'posts/' + postId + '/name');
+    onValue(postTitleRef, (snapshot) => {
+    const data = snapshot.val();
+    document.getElementById('post-title').textContent=data;
+    });
+    const postDescriptionRef = ref(db, 'posts/' + postId + '/description');
+    onValue(postDescriptionRef, (snapshot) => {
+    const data = snapshot.val();
+    document.getElementById('post-description').textContent=data;
+    });
+    const postContentRef = ref(db, 'posts/' + postId + '/content');
+    onValue(postContentRef, (snapshot) => {
+    const text = snapshot.val();
+    if(snapshot.val() === null){
+        console.log('No text error.')
+    }
+    let replacedText;
+    if (text.includes('*')) {
+    replacedText = text.replace(/\*/g, "</p><p>");
+    } else {
+    replacedText = text;
+    }
+
+    console.log(replacedText);
+    document.getElementById('post-content').innerHTML = replacedText;
+    });
+
+    // Display all Boards:
+    const BoardsRef = ref(db, 'posts/' + postId + '/boards');
+
+    onValue(BoardsRef, (snapshot) => {
+  // Sort childKeys in descending order
+  snapshot.forEach((childSnapshot) => {
+  const childKey = childSnapshot.key;
+  const boardContainer = document.getElementById(`${childKey}`);
+  const fen = childSnapshot.val();
+  const encodedFenString = encodeURIComponent(fen);
+  const imgUrl = `board.html?fen=${encodedFenString}`;
+  console.log(fen); // log the value to verify it is being retrieved correctly
+  boardContainer.innerHTML = `<iframe src="${imgUrl}" width="400px" height:"400px">`;
+  var boardsize = document.createElement('style');
+  boardsize.innerHTML = `
+  iframe {
+    border: none;
+  }
+  `;
+  document.body.appendChild(boardsize)
+
+});
+
+const postRef = ref(db, 'posts/' + postId);
+  onValue(postRef, (snapshot) => {
+  if(snapshot.val() === null){
+    document.getElementById('containerd').innerHTML = error;
+  }
+  });
+  }, {
+    onlyOnce: true
+  });
+    }
+    
+
+
+// VIEW ALL COMMENTS IN REALTIME
+  const allCommentsRef = ref(db, 'comments/');
+  onValue(allCommentsRef, (snapshot) => {
+    if(snapshot.val() === null){
+      var title = document.createElement("h1");
+      title.textContent = "It appears there is no comments posted.";
+      var description = document.createElement("h3");
+      description.textContent = "Please come back later.";
+      var div = document.createElement("div");
+      div.id = `not-avaliable`;
+      div.appendChild(title);
+      div.appendChild(description);
+      var styles = document.createElement("style");
+      styles.innerHTML = `h1{font-size: 20px} h3{font-size: 15px} *{text-align: center;} button{background: #00001D; color: white; border-radius: 20px}`;
+      div.appendChild(styles);
+      document.body.appendChild(div);
+    }
+    else {
+      console.log('Comments present');
+    }
+    snapshot.forEach((childSnapshot) => {
+      const childKey = childSnapshot.key;
+      childKeys.push(childKey);
+    });
+  });
+
+</script>
+<style>
+  p {
+    text-indent: 50px;
+  }
+  iframe {
+    width: 300px;
+    height: 300px;
+  }
+  @media screen and (max-width: 600px) {
+    iframe {
+      width: 250px;
+      height: 260px;
+    }
+  }
+</style>
+</html>

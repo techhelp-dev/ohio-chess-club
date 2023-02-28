@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ohio Chess Club</title>
+    <link href="home.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+</head>
+<nav>
+    <div class="topnav" id="myTopnav">
+        <a href="" class="logo">Ohio Chess Club</a>
+        <a href="#home" class="active">Home</a>
+        <a href="#news">News</a>
+        <a href="#contact">Contact</a>
+        <a href="#about">About</a>
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+          <i class="fa fa-bars"></i>
+        </a>
+      </div>
+</nav>
+<body>
+    <div style="padding-left:16px" class="container">
+        <h2 class="welcome-message">Welcome to the Ohio Chess Club Blogs!</h2>
+    </div>
+</body>
+
+<div class="posts-grid">
+
+</div>
+
+<!-- NAV JAVASCRIPT -->
+<script src="nav.js"></script>
+<script src="display-articles.js" type="module"></script>
+<style>
+        /* Set font sizes and alignment for title and description */
+        .post-title {
+      font-size: 24px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+  
+    .post-description {
+      font-size: 18px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  
+    /* Style the button */
+    .read-more-button {
+      background-color: #00001D;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 20px;
+    }
+  
+    .read-more-button:hover {
+      background-color: #1A1A34;
+    }
+  
+    /* Set the grid display */
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      justify-items: center;
+    }
+  
+    /* Style the post container */
+    .post-container {
+      background-color: white;
+      border: 1px solid #E6E6E6;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0px 0px 10px #E6E6E6;
+      width: 290px;
+      max-width: 290px;
+      text-align: center;
+    }
+</style>
+</html>
